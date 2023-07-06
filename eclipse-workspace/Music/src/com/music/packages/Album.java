@@ -17,6 +17,14 @@ public class Album {
 		
 	}
 	
+	public void printSong() {
+		if(songs.size() != 0) {
+			for(Song k : this.songs) {
+				System.out.println(k.getTitle());
+			}
+		}
+	}
+	
 	public Song findSong(String title) {
 		for(Song checkedSong : songs) {
 			if(checkedSong.getTitle().equals(title)) return checkedSong;

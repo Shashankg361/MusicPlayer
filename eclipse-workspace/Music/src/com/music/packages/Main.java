@@ -3,36 +3,44 @@ import java.util.*;
 
 public class Main {
 
-	public static ArrayList<Album> albums = new ArrayList<>(); 
+	public static HashMap <String , Album> albumNameWithObj = new HashMap<String , Album>();
+	public static HashMap <String , LinkedList<Song>> PlaylistNameWithLindkedlist = new HashMap<String , LinkedList<Song>>();
+	
 	public static void main(String[] args) {
 		
-		Album album = new Album("album1","Imagine dragon");
-		album.addSong("thunder",4.00);
-		album.addSong("beliver",4.50);
-		album.addSong("bird",3.20);
-		albums.add(album);
 		
-		album = new Album("album2" , "one direction");
-		album.addSong("beautifull", 3.55);
-		album.addSong("steal my girl", 4.20);
-		album.addSong("prefect", 4.00);
-		album.addSong("night changes", 4.35);
-		albums.add(album);
+		addNewAlbum("album1","Imagine dragon");
+		addSongToAlbum("album1","thunder",4.00);
+		addSongToAlbum("album1","beliver",4.50);
+		addSongToAlbum("album1","bird",3.20);
 		
-		LinkedList<Song> playlist_1 = new LinkedList<>();
 		
-		albums.get(0).addtoPlayList("thunder",playlist_1);
-		albums.get(0).addtoPlayList("beliver", playlist_1);
-		albums.get(1).addtoPlayList("steal my girl", playlist_1);
-		albums.get(1).addtoPlayList("night changes", playlist_1);
+		addNewAlbum("album2","One direction");
+		addSongToAlbum("album2","beautifull", 3.55);
+		addSongToAlbum("album2","steal my girl", 4.20);
+		addSongToAlbum("album2","prefect", 4.00);
+		addSongToAlbum("album2","night changes", 4.35);
+	
+		addNewPlaylist("Playlist-1");
 		
-		LinkedList<Song> playlist_2 = new LinkedList<>();
+		addSongToPlaylist("Playlist-1","album1","thunder");
+		addSongToPlaylist("Playlist-1","album1","bird");
+		addSongToPlaylist("Playlist-1","album1","beliver");
+		addSongToPlaylist("Playlist-1","album2","steal my girl");
+		addSongToPlaylist("Playlist-1","album2","night changes");
+
 		
-		albums.get(0).addtoPlayList("bird", playlist_2);
-		albums.get(1).addtoPlayList("prefect", playlist_2);
-		albums.get(1).addtoPlayList("beautifull", playlist_2);
+		addNewPlaylist("Playlist-2");
+		addSongToPlaylist("Playlist-2","album1","bird");
+		addSongToPlaylist("Playlist-2","album2","prefect");
+		addSongToPlaylist("Playlist-2","album2","beautifull");	
 		
-		play(playlist_1);
+		//Album albumSongs = new Album("zach seabhug album" , "zach seabhug");
+		albumNameWithObj.get("album1").printSong();
+		
+		
+		
+		playPlaylist("Playlist-1");
 
 	}
 	
@@ -127,6 +135,51 @@ public class Main {
 					}
 				}
 				break;
+				
+			case 7:
+				System.out.println("Enter Album name and Artist , put space between both names and don't give space in any name use -,_");
+				String albumname = sc.next();
+				String artistname = sc.next();
+				addNewAlbum(albumname , artistname);
+				break;
+				
+			case 8:
+				System.out.println("Enter Album name , Song name and duration of the song , put space between the values and don't give space in any name use -,_");
+				String nameofalbum = sc.next();
+				String nameOfSong = sc.next();
+				double durationOfSong = sc.nextDouble();
+				addSongToAlbum(nameofalbum , nameOfSong , durationOfSong);
+				break;
+				
+			case 9:
+				System.out.println("Enter playlist name,don't give space in any name use -,_");
+				String playlistName = sc.next();
+				playPlaylist(playlistName);
+				break;
+				
+			case 10:
+				System.out.println("Enter playlist name ,don't give space in any name use -,_");
+				String NameOfPlaylist = sc.next();
+				addNewPlaylist(NameOfPlaylist);
+				break;
+				
+			case 11:
+				System.out.println("Enter playlist name , album name and song name . put space between the values and don't give space in any name use -,_");
+				String PlaylistName = sc.next();
+				String AlbumName = sc.next();
+				String songName = sc.next();
+				addSongToPlaylist(PlaylistName , AlbumName , songName);
+				break;
+				
+			case 12:
+				Iterator<String> It = PlaylistNameWithLindkedlist.keySet().iterator();
+				
+				while(It.hasNext()) {
+					System.out.println(It.next() + " \n ");
+				}
+				break;
+				
+				
 			}
 			
 		}
@@ -140,7 +193,13 @@ public class Main {
 				"3 - to replay current song\n"+
 				"4 - List of all songs\n"+
 				"5 - print all alvailabe option\n"+
-				"6 - delete current song\n"
+				"6 - delete current song\n"+
+				"7 - Add new album\n"+
+				"8 - Add song to ablum\n"+
+				"9 - To change playlist\n"+
+				"10 - Create new playlist\n"+
+				"11 - Add song to playlist\n"+
+				"12 - View All playlist's\n"
 				);
 	}
 	
@@ -155,5 +214,54 @@ public class Main {
 		
 		System.out.println("------------------");
 	}
+	
+	public static void addNewAlbum(String newAlbumName , String artistName) {
+		//String Str = newAlbumName;
+		Album album = new Album(newAlbumName , artistName);
+		albumNameWithObj.put(newAlbumName , album);
+		System.out.println("album added");
+		//System.out.println(albumNameWithObj.get(newAlbumName));
+	}
+	
+	public static void addSongToAlbum (String albumName ,String name , double duartion) {
+		
+		Album albumObj = albumNameWithObj.get(albumName);
+		if(albumObj != null) {
+			albumObj.addSong(name, duartion);
+			System.out.println("Song added sucseefully to album " + albumName );
+		}else {
+			System.out.println(albumName +" - doest not exist");
+		}
+	}
+	
+	public static void addNewPlaylist(String PlaylistName) {
+		LinkedList<Song> Playlist = new LinkedList<>();
+		PlaylistNameWithLindkedlist.put(PlaylistName , Playlist);
+		System.out.println(PlaylistName + "created new playlist");
+		
+	}
+	
+	public static void addSongToPlaylist(String playlistName , String albumName , String songName) {
+		LinkedList<Song> playlist = PlaylistNameWithLindkedlist.get(playlistName);
+		if (playlist != null) {
+		    albumNameWithObj.get(albumName).addtoPlayList(songName, playlist);
+		    System.out.println("Successfully Song added to playlist " + playlistName );
+
+		} else {
+		    System.out.println(playlistName + " does not exist.");
+		}
+	}
+	
+	public static void playPlaylist(String playlistName) {
+		LinkedList<Song> playPlaylist = PlaylistNameWithLindkedlist.get(playlistName);
+		if(playPlaylist != null) {
+			play(playPlaylist);
+		}else {
+			System.out.println(playlistName + "  - does not exist");
+		}
+		
+	}
 
 }
+
+
